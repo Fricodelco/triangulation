@@ -12,6 +12,7 @@ class Localizer(Sim):
                     data["camera_noise"], data["camera_vision_angle"],
                     data["camera_pose_x"], data["camera_pose_y"],
                     data["camera_alpha"], data["seed"])
+        self.show_config = data["show_config"]
         self.seen_x, self.seen_y, self.seen_alpha = super().get_camera_measurement()
         self.localize()
 
@@ -25,14 +26,26 @@ class Localizer(Sim):
     def localize(self):
         if self.seen_alpha.shape[0] > 2:
             x, y, alpha = self.sort_seens(self.seen_x, self.seen_y, self.seen_alpha)
-            x_3, y_3 = x[0], y[0]
-            x_2, y_2 = x[1], y[1]
-            x_1, y_1 = x[2], y[2]
-            phi_2 = abs(alpha[1] - alpha[0])
-            phi_1 = abs(alpha[2] - alpha[1])
-            x_cam, y_cam = self.find_camera(x_1, y_1, x_2, y_2, x_3, y_3, phi_1, phi_2)
-            print(x_cam, y_cam)
-            super().show_config()
+            for i in range(x.shape[0]-2):
+                for j in range(i, x.shape[0]-2):
+                    # x_3, y_3 = x[0], y[0]
+                    # x_2, y_2 = x[1], y[1]
+                    # x_1, y_1 = x[2], y[2]
+                    # phi_2 = abs(alpha[1] - alpha[0])
+                    # phi_1 = abs(alpha[2] - alpha[1])
+                    x_3, y_3 = x[j], y[j]
+                    x_2, y_2 = x[j+1], y[j+1]
+                    x_1, y_1 = x[j+2], y[j+2]
+                    phi_2 = abs(alpha[j+1] - alpha[j])
+                    phi_1 = abs(alpha[j+2] - alpha[j+1])
+                    cam_x, cam_y = self.find_camera(x_1, y_1, x_2, y_2, x_3, y_3, phi_1, phi_2)
+                    cam_alpha = atan2(y_1 - cam_y, x_1 - cam_x) - alpha[2]
+                    if cam_alpha < 0:
+                        cam_alpha+=2*pi
+                    print("estimated camera pose:", cam_x, cam_y, cam_alpha)
+                    print("real camera pose:", self.cam_x, self.cam_y, self.cam_alpha)
+            if self.show_config:
+                super().show_config()
         else:
             print("not enough data to localize")
             return None

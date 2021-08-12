@@ -18,7 +18,6 @@ class Sim():
         self.camera_vision_angle = camera_vision_angle
         self.camera_noise = camera_noise
         self.marks_x, self.marks_y = self.generate_marks()
-        self.show_config()
         
     def generate_marks(self):
         marks_x = []
@@ -55,10 +54,10 @@ class Sim():
                     angle = angle + 2*pi
                 marks_touched_x.append(x)
                 marks_touched_y.append(y)
-                sigma = angle*self.camera_noise
+                sigma = self.camera_noise
                 angle += random.gauss(0, sigma)
                 angles.append(angle)
-        return marks_touched_x, marks_touched_y, angles  
+        return np.asarray(marks_touched_x), np.asarray(marks_touched_y), np.asarray(angles)
     
     def check_first_line(self, angle, x, y, k, b):
         if cos(angle) > 0 and y < k*x + b:
@@ -81,7 +80,6 @@ class Sim():
         plt.plot(self.marks_x, self.marks_y, 'ro')
         plt.plot(marks_touched_x, marks_touched_y, 'bo')
         plt.plot(self.cam_x, self.cam_y, 'go')
-        
         if cos(self.cam_alpha) < 0:
             x_0 = self.x_min
         else:  

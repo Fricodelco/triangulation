@@ -1,0 +1,13 @@
+{
+    "x_min": -5, 
+    "x_max": 5,
+    "y_min": -5,
+    "y_max": 5,
+    "markers_count": 40,
+    "camera_noise": 0.0,
+    "camera_vision_angle": 1.03,
+    "camera_pose_x": 1,
+    "camera_pose_y": 1,
+    "camera_alpha": 5, 
+    "seed": 103
+}

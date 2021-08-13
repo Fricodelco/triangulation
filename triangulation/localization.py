@@ -1,4 +1,4 @@
-from sim import Sim
+from triangulation.sim import Sim
 from pathlib import Path
 import json
 from math import sqrt, atan2, asin, sin, cos, pi
@@ -16,8 +16,7 @@ class Localizer(Sim):
                          data["camera_alpha"], data["seed"])
         self.show_config = data["show_config"]
         self.seen_x, self.seen_y, self.seen_alpha = super().get_camera_measurement()
-        self.outlier_border = 2
-        self.localize()
+        self.outlier_border = data["outlier_border"]
 
     def get_json_config(self):
         path = Path(__file__).resolve().parent

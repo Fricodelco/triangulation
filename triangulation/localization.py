@@ -1,8 +1,9 @@
 from sim import Sim
 from pathlib import Path
 import json
-from math import sqrt, tan, atan2, sin, cos, pi
+from math import sqrt, atan2, asin, sin, cos, pi
 import numpy as np
+from scipy.spatial.transform import Rotation
 
 
 class Localizer(Sim):
@@ -44,9 +45,13 @@ class Localizer(Sim):
                     cam_alpha_ = atan2(y_1 - cam_y_, x_1 - cam_x_) - alpha[j]
                     if cam_alpha_ < 0:
                         cam_alpha_ += 2*pi
+                    rot = Rotation.from_euler('xyz', [0, 0, cam_alpha_])
+                    q = rot.as_quat()
+                    rot = Rotation.from_quat(q)
+                    alpha_ = rot.as_euler('xyz')[2]
                     cam_x.append(cam_x_)
                     cam_y.append(cam_y_)
-                    cam_alpha.append(cam_alpha_)
+                    cam_alpha.append(alpha_)
             cam_x = np.asarray(cam_x)
             cam_y = np.asarray(cam_y)
             cam_alpha = np.asarray(cam_alpha)

@@ -4,12 +4,13 @@
     "y_min": -5,
     "y_max": 5,
     "markers_count": 100,
-    "camera_noise": 0.02,
+    "camera_noise": 0.01,
     "camera_vision_angle": 1.53,
-    "camera_pose_x": 1,
-    "camera_pose_y": 1,
-    "camera_alpha": 0.0, 
-    "seed": 120,
+    "camera_pose_x": 0.0,
+    "camera_pose_y": 0.0,
+    "camera_alpha": 5.0, 
+    "seed": 121,
     "show_config": true,
-    "outlier_border":2
+    "outlier_border": 2
 }
+

@@ -19,6 +19,10 @@ class Sim():
         self.camera_noise = camera_noise
         self.marks_x, self.marks_y = self.generate_marks()
 
+    """ Method for generating marks in random positions
+        Count of marks depends on markers_count, location area
+        of marks depends on x and y limits
+    """
     def generate_marks(self):
         marks_x = []
         marks_y = []
@@ -33,6 +37,9 @@ class Sim():
         marks_y = np.asarray(marks_y)
         return marks_x, marks_y
 
+    """ Method for generating measurement of camera with given noise
+        measurement generates with gauss noise and std = camera_noise
+    """
     def get_camera_measurement(self):
         angle_1 = self.cam_alpha + self.camera_vision_angle/2
         angle_2 = self.cam_alpha - self.camera_vision_angle/2
@@ -60,6 +67,9 @@ class Sim():
                 angles.append(angle)
         return np.asarray(marks_touched_x), np.asarray(marks_touched_y), np.asarray(angles)
 
+    """ Checking if the marker under or above first line
+        checking condition depends on the angle 
+    """
     def check_first_line(self, angle, x, y, k, b):
         if cos(angle) > 0 and y < k*x + b:
             return True
@@ -67,13 +77,18 @@ class Sim():
             return True
         return False
 
+    """ Checking if the marker under or above second line
+        checking condition depends on the angle 
+    """
     def check_second_line(self, angle, x, y, k, b):
         if cos(angle) < 0 and y < k*x + b:
             return True
         if cos(angle) > 0 and y > k*x + b:
             return True
         return False
-
+    
+    """ Method for visualize givven config with matplotlib
+    """
     def show_config(self):
         plt.xlim(self.x_min, self.x_max)
         plt.ylim(self.y_min, self.y_max)
